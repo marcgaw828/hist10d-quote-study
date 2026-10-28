@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How Empires Fall: Quote Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E7ECF0; --card:#FCFDFE; --ink:#1A2230; --muted:#5A6576; --line:#C9D2DC;
+  --rule:#B3261E; --blue:#2C5A86; --blue-soft:#DCE7F2; --good:#2D6A4F; --good-soft:#DDEFE5;
+  --bad:#A4281F; --bad-soft:#F6E1DE; --gold:#9A6B10;
+  --serif:"Libre Caslon Text", Georgia, "Times New Roman", serif;
+  --sans:"Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11161D; --card:#1A212B; --ink:#E4E9EF; --muted:#9AA6B5; --line:#2E3946;
+    --rule:#E0675C; --blue:#86B3DE; --blue-soft:#20334A; --good:#7CC9A1; --good-soft:#173328;
+    --bad:#F08A80; --bad-soft:#3A1F1D; --gold:#E0B456; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11161D; --card:#1A212B; --ink:#E4E9EF; --muted:#9AA6B5; --line:#2E3946;
+  --rule:#E0675C; --blue:#86B3DE; --blue-soft:#20334A; --good:#7CC9A1; --good-soft:#173328;
+  --bad:#F08A80; --bad-soft:#3A1F1D; --gold:#E0B456; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.wrap{max-width:960px;margin:0 auto;padding:20px 20px 64px}
+header.top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+header.top h1{font-family:var(--serif);font-weight:400;font-size:1.55rem;margin:0;letter-spacing:-.01em}
+header.top .sub{color:var(--muted);font-size:.9rem}
+.layout{display:grid;grid-template-columns:240px 1fr;gap:24px}
+@media (max-width:760px){.layout{grid-template-columns:1fr}}
+/* topic drawer = card catalog drawer fronts */
+nav.drawers{display:flex;flex-direction:column;gap:6px}
+@media (max-width:760px){nav.drawers{flex-direction:row;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}}
+.drawer{text-align:left;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:10px 12px;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:2px 8px;min-width:190px}
+.drawer:hover{border-color:var(--blue)}
+.drawer[aria-current="true"]{border-color:var(--blue);background:var(--blue-soft)}
+.drawer .t{font-weight:600;font-size:.92rem;line-height:1.3}
+.drawer .d{color:var(--muted);font-size:.78rem;grid-column:1}
+.drawer .p{grid-row:1/3;grid-column:2;align-self:center;font-size:.78rem;color:var(--muted);text-align:right;white-space:nowrap}
+.drawer.all .t{font-family:var(--serif);font-weight:400;font-size:1rem}
+main{min-width:0}
+.modes{display:flex;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:4px;margin-bottom:14px;width:max-content;max-width:100%;overflow-x:auto}
+.modes button{border:0;background:transparent;padding:8px 14px;border-radius:5px;cursor:pointer;font-weight:500;color:var(--muted);white-space:nowrap}
+.modes button[aria-pressed="true"]{background:var(--ink);color:var(--card)}
+.opts{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;color:var(--muted);font-size:.88rem;margin-bottom:16px}
+.opts label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.opts select{font:inherit;padding:4px 6px;border-radius:5px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.opts input{accent-color:var(--blue)}
+/* the index card */
+.icard{background:var(--card);border:1px solid var(--line);border-radius:4px;position:relative;padding:22px 26px 22px;box-shadow:0 1px 0 var(--line), 0 6px 18px -12px rgba(20,30,45,.35)}
+.icard::before{content:"";position:absolute;left:0;right:0;top:52px;border-top:1.5px solid var(--rule);opacity:.75}
+.icard .meta{display:flex;justify-content:space-between;gap:10px;height:30px;align-items:center;color:var(--muted);font-size:.82rem}
+.stars{color:var(--gold);letter-spacing:.05em;font-size:.95rem}
+.quote{font-family:var(--serif);font-size:1.28rem;line-height:1.6;margin:22px 0 4px;max-width:62ch}
+.quote.long{font-size:1.1rem}
+.prompt{font-weight:600;margin:18px 0 10px;font-size:.95rem}
+/* flashcard flip */
+.flip{perspective:1600px;cursor:pointer;min-height:340px}
+.flip .inner{position:relative;transition:transform .45s ease;transform-style:preserve-3d;min-height:340px}
+.flip.on .inner{transform:rotateY(180deg)}
+.flip .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:auto}
+.flip .back{transform:rotateY(180deg)}
+@media (prefers-reduced-motion:reduce){.flip .inner{transition:none}}
+.who{font-family:var(--serif);font-size:1.5rem;margin:22px 0 2px}
+.src{color:var(--muted);font-size:.9rem;margin-bottom:14px}
+dl.explain{margin:0;display:grid;gap:10px;max-width:68ch}
+dl.explain dt{font-weight:600;font-size:.85rem;color:var(--blue)}
+dl.explain dd{margin:0}
+.hint{color:var(--muted);font-size:.82rem;margin-top:10px;text-align:center}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--card);padding:9px 16px;border-radius:6px;cursor:pointer;font-weight:600}
+.btn:hover{border-color:var(--blue)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:var(--card)}
+.btn.good{background:var(--good-soft);border-color:var(--good);color:var(--good)}
+.btn.bad{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.count{color:var(--muted);font-size:.9rem}
+.progress{height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin-bottom:14px}
+.progress span{display:block;height:100%;background:var(--blue);transition:width .25s}
+/* choices */
+.choices{display:grid;gap:8px;margin-top:6px}
+.choice{display:flex;gap:12px;align-items:flex-start;text-align:left;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:11px 14px;cursor:pointer;line-height:1.4}
+.choice:hover:not([disabled]){border-color:var(--blue)}
+.choice .k{flex:none;width:22px;height:22px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:.75rem;color:var(--muted);margin-top:1px}
+.choice.right{border-color:var(--good);background:var(--good-soft)}
+.choice.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.choice[disabled]{cursor:default}
+.feedback{margin-top:16px;border-top:1px dashed var(--line);padding-top:14px}
+.verdict{font-weight:700;margin-bottom:8px}
+.verdict.ok{color:var(--good)} .verdict.no{color:var(--bad)}
+.write{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.write input{flex:1 1 240px;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink)}
+.done{text-align:left}
+.done .big{font-family:var(--serif);font-size:3rem;line-height:1;margin:22px 0 6px}
+.missedlist{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:8px}
+.missedlist li{border-left:3px solid var(--bad);padding:4px 0 4px 12px}
+.missedlist b{font-weight:600}
+.empty{color:var(--muted);padding:30px 0}
+.kbd{font-size:.78rem;color:var(--muted);margin-top:18px}
+.kbd kbd{font-family:var(--sans);border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 5px;background:var(--card)}
+.theme{border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:.82rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>How Empires Fall: quote study</h1>
+      <div class="sub">HIST 10D midterm, Wednesday 10/28. Slide quotes first; ★★ means shown in two or more lectures.</div>
+    </div>
+    <button class="theme" id="themeBtn" type="button">Theme</button>
+  </header>
+  <div class="layout">
+    <nav class="drawers" id="drawers" aria-label="Topics"></nav>
+    <main>
+      <div class="modes" role="group" aria-label="Study mode">
+        <button type="button" data-mode="learn">Learn</button>
+        <button type="button" data-mode="flash">Flashcards</button>
+        <button type="button" data-mode="write">Write</button>
+      </div>
+      <div class="opts" id="opts">
+        <label>Questions
+          <select id="len"><option value="8">8</option><option value="12">12</option><option value="all">All</option></select>
+        </label>
+        <label><input type="checkbox" id="starOnly"> ★★ only</label>
+        <label><input type="checkbox" id="missOnly"> Missed cards only <span id="missN"></span></label>
+      </div>
+      <div class="progress" aria-hidden="true"><span id="prog" style="width:0"></span></div>
+      <section id="stage" aria-live="polite"></section>
+      <div class="kbd" id="kbd"></div>
+    </main>
+  </div>
+</div>
+<script>
+const TOPICS = [{"id": "rev", "name": "French and Haitian Revolutions", "dates": "9/28, 10/5", "cards": [{"stars": 2, "quote": "\"whoever refuses to obey the general will shall be compelled to do so by the whole body… he will be forced to be free\"; also \"each, while uniting himself with all, may still obey himself alone\"", "meaning": "People stay free by obeying the general will, the common good. Anyone who refuses can be compelled, and that still counts as freedom.", "sig": "Founds popular sovereignty. Its dark side, that dissent equals unfreedom, points to Robespierre.", "author": "Rousseau", "alias": ["rousseau"], "source": "Rousseau, The Social Contract, 1762", "id": "rev0"}, {"stars": 2, "quote": "\"What is the Third Estate? Everything. What has it been until now? Nothing. What does it want to be? Something.\"; \"all that is necessary for the formation of a complete nation\"; \"the strong and robust man who has one arm still shackled\"", "meaning": "Commoners do all the useful work and already form the whole nation. The privileged orders are dead weight.", "sig": "Redefines the nation as the productive Third Estate. It leads to the National Assembly (June 17, 1789). The 10/7 slide reused his passage on who sustains society.", "author": "Sieyès", "alias": ["sieyes", "sieyès"], "source": "Abbé Sieyès, \"What is the Third Estate?\", Jan 1789", "id": "rev1"}, {"stars": 2, "quote": "\"virtue and terror: virtue, without which terror is fatal; terror, without which virtue is impotent. Terror is nothing but prompt, severe, inflexible justice\"; \"Without, all the tyrants encircle you; within, all the friends of tyranny conspire\"", "meaning": "In wartime revolution, virtue needs terror to be effective. Terror is justice that flows from virtue.", "sig": "Justifies the Terror (at least 20,000 executed). Rousseau's general will, weaponized. A model for later one-party rule.", "author": "Robespierre", "alias": ["robespierre"], "source": "Robespierre, \"On Political Morality,\" Feb 1794", "id": "rev2"}, {"stars": 2, "quote": "\"we must live independent or die\"; \"forever assure the empire of liberty in the country of our birth\"; \"take any hope of re-enslaving us away\"", "meaning": "Break with France permanently so slavery can never return.", "sig": "First successful slave revolution and first Black republic. Takes 1789's universalism further than France did.", "author": "Dessalines", "alias": ["dessalines"], "source": "Dessalines, Haitian Declaration of Independence, Jan 1, 1804", "id": "rev3"}, {"stars": 1, "quote": "\"I am the people myself!\"", "meaning": "He claims to personally embody the popular will.", "sig": "The danger of one man speaking for \"the people.\" Compare Lenin's vanguard.", "author": "Robespierre", "alias": ["robespierre"], "source": "Robespierre, 1792", "id": "rev4"}, {"stars": 1, "quote": "\"The alms given to a naked man in the street do not fulfil the obligations of the state, which owes to every citizen a certain subsistence\"", "meaning": "The state, not charity, owes citizens food, clothing, and health.", "sig": "Enlightenment roots of social rights. It foreshadows Tristan's \"right to live.\"", "author": "Montesquieu", "alias": ["montesquieu"], "source": "Montesquieu, The Spirit of Laws, 1748", "id": "rev5"}, {"stars": 1, "quote": "Art. 1 \"Men are born and remain free and equal in rights\"; Art. 3 sovereignty \"lies primarily in the Nation\"; Art. 6 \"Law is the expression of the general will\"; Art. 17 property \"inviolable and sacred\"", "meaning": "Universal natural rights. Sovereignty moves from king to nation.", "sig": "Universal in words, limited in practice: it left out women, enslaved people, and the poor. That is the setup for de Gouges, Toussaint, and Tristan.", "author": "Declaration of the Rights of Man", "alias": ["rights of man", "declaration of the rights of man", "drm", "droits"], "source": "Declaration of the Rights of Man and Citizen, Aug 26, 1789", "id": "rev6"}, {"stars": 1, "quote": "\"Woman is born free and remains equal to man in rights… the nation, which is but the reuniting of woman and man\"", "meaning": "Rewrites the Declaration to include women.", "sig": "Exposes the limits of 1789. She was guillotined in 1793 as an \"unnatural\" woman.", "author": "Olympe de Gouges", "alias": ["gouges", "olympe"], "source": "Olympe de Gouges, \"Declaration of the Rights of Woman,\" Sept 1791", "id": "rev7"}, {"stars": 1, "quote": "\"I was born a slave, but nature gave me the soul of a free man… I want Liberty and Equality to reign in Saint-Domingue\"", "meaning": "Claims the Revolution's ideals for the enslaved.", "sig": "The enslaved take liberty and equality literally. The revolt began in August 1791.", "author": "Toussaint Louverture", "alias": ["toussaint", "louverture"], "source": "Toussaint Louverture", "id": "rev8"}, {"stars": 1, "quote": "\"The fortunes created at Bordeaux, at Nantes, by the slave trade gave to the bourgeoisie that pride which needed liberty\"", "meaning": "French liberty was financed by slavery.", "sig": "The course thesis: European freedom was built on empire.", "author": "Jean Jaurès", "alias": ["jaures", "jaurès"], "source": "Jean Jaurès, quoted in C.L.R. James, Black Jacobins (1938)", "id": "rev9"}, {"stars": 1, "quote": "\"Bliss was it in that dawn to be alive, / But to be young was very heaven!\"", "meaning": "The euphoria of the Revolution's early days.", "sig": "Paired with Dickens's \"It was the best of times, it was the worst of times\" (A Tale of Two Cities, 1859).", "author": "Wordsworth", "alias": ["wordsworth"], "source": "Wordsworth, 1809", "id": "rev10"}, {"stars": 1, "quote": "\"wind-gusts which make the rotten fruit fall\"; rebels shouting for \"Jesus Christ and the virgin, Louis XVII\"; republicans as \"fanatics for so-called liberty\"", "meaning": "Jacobins frame mass killing as pruning the nation. Rebels see the republic as fanatical.", "sig": "The revolution turns on its own people.", "author": "Vendée civil war voices", "alias": ["vendee", "vendée"], "source": "Vendée civil war voices, 1793", "id": "rev11"}, {"stars": 1, "quote": "Any country fighting a foreign war plus a civil war turns to \"summary and rapid justice\"", "meaning": "The Terror was a response to emergency circumstances.", "sig": "The circumstantial explanation of the Terror.", "author": "Albert Mathiez", "alias": ["mathiez"], "source": "Albert Mathiez, 1927", "id": "rev12"}, {"stars": 1, "quote": "The Terror refashioned \"a kind of divine right of public authority\"", "meaning": "The Terror grew out of democratic rhetoric itself, as factions competed to embody the people's will.", "sig": "The ideological explanation. Contrast it with Mathiez.", "author": "François Furet", "alias": ["furet"], "source": "François Furet, 1978", "id": "rev13"}]}, {"id": "ind", "name": "Industrial Revolution", "dates": "10/7", "cards": [{"stars": 2, "quote": "\"The Factory system is a modern creation; history throws no light on its nature\"; the jenny \"without ancestry\"; machines \"sprang into sudden existence like Minerva from the brain of Jupiter\"; \"mighty energies slumbering in the masses\" (10/12 slide title)", "meaning": "Industrialization was sudden and unprecedented, with no history to explain it.", "sig": "An Irish writer sponsored by the Anti-Corn Law League, writing to economist Whately during the 1837 to 1843 depression. Mention his pro-industry slant.", "author": "William Cooke Taylor", "alias": ["cooke taylor", "taylor"], "source": "William Cooke Taylor, Notes of a Tour in the Manufacturing Districts of Lancashire, 1842", "id": "ind14"}, {"stars": 2, "quote": "Egg cooking-time of \"one Ave Maria said aloud\"; \"a rice-cooking\"; \"the frying of a locust\"; light enough \"to see the veins in the hand\"; will we lose the restless urgency we carry like a watch?", "meaning": "Pre-industrial time was task-oriented. Industrial capitalism imposed clock time, enforced by clocks, bells, fines, schools, and sermons.", "sig": "A secondary source by a Marxist social historian. Workers had to internalize time discipline, and we still carry it today.", "author": "E.P. Thompson", "alias": ["thompson"], "source": "E.P. Thompson, \"Time, Work-Discipline, and Industrial Capitalism,\" 1967", "id": "ind15"}, {"stars": 1, "quote": "\"the animal machine… is chained fast to the iron machine, which knows no suffering and no weariness\"; \"men, women and children are yoked together with iron and steam\"", "meaning": "Fragile bodies are forced to match the pace of tireless machines.", "sig": "A reformer's critique: industry dehumanizes. Cholera-era Manchester.", "author": "James Phillips Kay", "alias": ["kay"], "source": "James Phillips Kay, \"Moral and Physical Condition of the Operatives… in Manchester,\" 1832", "id": "ind16"}, {"stars": 1, "quote": "\"If the weavers' shuttles were to weave of themselves… no need either of apprentices for the master craftsmen, or of slaves for the lords\"", "meaning": "Only self-working machines could end servile labor.", "sig": "The irony: machines came, but labor intensified (see Kay).", "author": "Aristotle", "alias": ["aristotle"], "source": "Aristotle, c. 350 BC", "id": "ind17"}, {"stars": 1, "quote": "\"Come, Brethren of the water\"; \"they do mean all Fens to drain\"; \"we must die, 'cause Essex calves want pasture\"", "meaning": "Fen dwellers protest drainage that destroys their livelihood.", "sig": "The human cost of the Agricultural Revolution: enclosure and land reclamation.", "author": "\"The Powtes' Complaint\"", "alias": ["powte", "powtes"], "source": "\"The Powtes' Complaint,\" 1611", "id": "ind18"}, {"stars": 1, "quote": "\"Let the time of your Sleep be so much only as health requireth\" (Poor Man's Family Book, 1674); bed a \"shameful devourer of Time and Money\" (Friendly Advice to the Poor, 1755); flesh \"parboiled\" between warm sheets (Wesley, 1786)", "meaning": "Idleness is sinful, and time is money.", "sig": "Thompson's evidence that religion taught time discipline.", "author": "Moralists on time (Wesley et al.)", "alias": ["wesley", "moralist", "methodist", "poor man"], "source": "Moralists and Methodists on time", "id": "ind19"}, {"stars": 1, "quote": "\"What is necessary that a nation should subsist and prosper?… Who puts them forth? The Third Estate.\"", "meaning": "Productive labor sustains the nation.", "sig": "Kliger linked 1789 politics to the question of labor.", "author": "Sieyès", "alias": ["sieyes", "sieyès"], "source": "Sieyès, 1789 (reused on the 10/7 slide)", "id": "ind20"}]}, {"id": "soc", "name": "Social Reform", "dates": "10/12", "cards": [{"stars": 1, "quote": "\"The history of all hitherto existing society is the history of class struggles. Freeman and slave, patrician and plebeian, lord and serf…\"", "meaning": "History is driven by conflict between oppressor and oppressed classes.", "sig": "The founding line of Marxism, written in the year of revolution.", "author": "Marx and Engels", "alias": ["marx", "engels"], "source": "Marx and Engels, Communist Manifesto, 1848 (class struggle)", "id": "soc21"}, {"stars": 1, "quote": "Bourgeois society \"has not done away with class antagonisms. It has but established new classes, new conditions of oppression\"", "meaning": "Capitalism didn't end oppression, it created new forms of it.", "sig": "Industrial workers are the new oppressed class.", "author": "Marx and Engels", "alias": ["marx", "engels"], "source": "Marx and Engels, 1848 (new classes)", "id": "soc22"}, {"stars": 1, "quote": "The bourgeoisie gives \"a cosmopolitan character to production and consumption\"; \"new wants, requiring… the products of distant lands and climes\"", "meaning": "Capitalism globalizes, destroying national industries.", "sig": "Links industry to world markets and to empire.", "author": "Marx and Engels", "alias": ["marx", "engels"], "source": "Marx and Engels, 1848 (globalization)", "id": "soc23"}, {"stars": 1, "quote": "\"private property is already done away with for nine-tenths of the population\"", "meaning": "Capitalism already denies property to most people.", "sig": "A rebuttal to critics of communism.", "author": "Marx and Engels", "alias": ["marx", "engels"], "source": "Marx and Engels, 1848 (property)", "id": "soc24"}, {"stars": 1, "quote": "\"All that is solid melts into air, all that is holy is profaned\"", "meaning": "Capitalism dissolves every tradition and forces people to face their real conditions.", "sig": "The most famous image of modernity's upheaval.", "author": "Marx and Engels", "alias": ["marx", "engels"], "source": "Marx and Engels, 1848 (melts into air)", "id": "soc25"}, {"stars": 1, "quote": "\"hunt in the morning, fish in the afternoon, rear cattle in the evening, criticise after dinner\"", "meaning": "Under communism, people are free from a single fixed job.", "sig": "The utopian vision against the factory's division of labor.", "author": "Marx and Engels", "alias": ["marx", "engels"], "source": "Marx and Engels, The German Ideology", "id": "soc26"}, {"stars": 1, "quote": "\"there is an imperious, imprescriptible right engendering all the others, the right to live\"; \"proletarians, there remains for you men of 1843 a no less great work\"; \"emancipate the last slaves still remaining in French society; proclaim the rights of woman\"", "meaning": "The rights of 1789 are worthless to the propertyless without the right to live. Workers must finish what their fathers began, and that includes freeing women.", "sig": "A socialist-feminist bridge from 1789 to class and gender politics. She links de Gouges and Montesquieu to Marx.", "author": "Flora Tristan", "alias": ["tristan"], "source": "Flora Tristan, The Workers' Union, 1843 (right to live)", "id": "soc27"}, {"stars": 1, "quote": "\"WORKERS UNION PALACE… 2 FRANCS… to honor work… the workers, who feed and enrich the nation and constitute its true power\"", "meaning": "A plan to build a workers' palace funded by workers' own dues.", "sig": "Workers are the true nation, an echo of Sieyès's claim for the Third Estate.", "author": "Flora Tristan", "alias": ["tristan"], "source": "Flora Tristan, 1843 (Workers Union Palace)", "id": "soc28"}, {"stars": 1, "quote": "\"we are all guilty… the thief and the receiver of stolen goods… by PURCHASING ITS PRODUCE\"", "meaning": "British consumers sustain slavery by buying slave-grown sugar. Boycott, and abolish slavery now.", "sig": "Signed \"by a woman in England.\" It ties everyday consumption to colonial slavery.", "author": "Elizabeth Heyrick", "alias": ["heyrick"], "source": "Elizabeth Heyrick, \"Immediate, not Gradual Abolition,\" 1824", "id": "soc29"}, {"stars": 1, "quote": "\"just and expedient that all such persons should be manumitted… and that a reasonable Compensation should be made to the persons hitherto entitled to the services of such slaves\"", "meaning": "Abolition, but the slaveholders are the ones paid.", "sig": "The enslaved got nothing. Parallel: Haiti's 1825 indemnity of 150 million francs, paid until the 1950s.", "author": "Slavery Abolition Act (1833)", "alias": ["abolition act", "slavery abolition"], "source": "Slavery Abolition Act, UK, 1833", "id": "soc30"}, {"stars": 1, "quote": "\"Two nations; between whom there is no intercourse and no sympathy… as if they were… inhabitants of different planets\"", "meaning": "Rich and poor live in separate worlds.", "sig": "Class division as a crisis of national unity. Rhodes offers empire as the cure.", "author": "Benjamin Disraeli", "alias": ["disraeli"], "source": "Benjamin Disraeli, Sybil, 1845", "id": "soc31"}, {"stars": 1, "quote": "\"I wander thro' each charter'd street\"; \"Marks of weakness, marks of woe\"; \"The mind-forg'd manacles I hear\"", "meaning": "The commercial city is a place of misery and bondage.", "sig": "Romantic protest against the new urban order.", "author": "William Blake", "alias": ["blake"], "source": "William Blake, \"London,\" 1794", "id": "soc32"}, {"stars": 1, "quote": "\"I am weary of seeing the shore in each successive mirage… whether we are not doomed to rove upon the seas forever!\"", "meaning": "The French Revolution never seems to end.", "sig": "1830 and 1848 keep reopening 1789.", "author": "Tocqueville", "alias": ["tocqueville"], "source": "Tocqueville, on 1848", "id": "soc33"}]}, {"id": "nat", "name": "Nationalism and National Unification", "dates": "10/14", "cards": [{"stars": 1, "quote": "\"Forgetting, I would even go so far as to say historical error, is a crucial factor in the creation of a nation\"; \"Unity is always effected by means of brutality\"", "meaning": "Nations depend on forgetting the violence that founded them.", "sig": "Nations are constructed, not natural. Pairs with Hobsbawm.", "author": "Ernest Renan", "alias": ["renan"], "source": "Ernest Renan, \"What is a Nation?\", 1882 (forgetting)", "id": "nat34"}, {"stars": 1, "quote": "\"A nation is a spiritual principle… not a group determined by the shape of the earth\"; not race, language, material interest, religion, geography, or military necessity", "meaning": "Objective traits don't make a nation.", "sig": "A rebuttal of German ethnic and linguistic nationalism after France lost Alsace-Lorraine in 1871.", "author": "Ernest Renan", "alias": ["renan"], "source": "Renan, 1882 (spiritual principle)", "id": "nat35"}, {"stars": 1, "quote": "\"A nation is a soul\"; \"a rich legacy of memories\" plus \"present-day consent, the desire to live together\"; \"common glories in the past… a common will in the present\"", "meaning": "A nation is shared memory plus a choice to keep living together.", "sig": "Civic, voluntarist nationalism, often summed up as his \"daily plebiscite.\"", "author": "Ernest Renan", "alias": ["renan"], "source": "Renan, 1882 (a soul)", "id": "nat36"}, {"stars": 1, "quote": "\"not by its liberalism but by its power\"; \"Not through speeches and majority decisions… that was the great mistake of 1848 and 1849, but by iron and blood\"", "meaning": "Prussia will unify Germany by force, not parliamentary debate.", "sig": "Realpolitik. Wars in 1864, 1866, and 1870 led to unification in 1871, a rejection of liberal 1848 nationalism.", "author": "Otto von Bismarck", "alias": ["bismarck"], "source": "Otto von Bismarck, speech, 1862", "id": "nat37"}, {"stars": 1, "quote": "Cede \"Savoy and the County of Nice\"; \"isolate Austria so that she would be our sole opponent\"; count on \"England's neutrality\"", "meaning": "Secret planning with Napoleon III for a war against Austria alone.", "sig": "Italian unification as cynical top-down diplomacy.", "author": "Cavour", "alias": ["cavour"], "source": "Cavour, letter to King Victor Emmanuel, July 24, 1858", "id": "nat38"}, {"stars": 1, "quote": "\"This is not Italy! This is Africa\" (on the 10/19 slides)", "meaning": "Northern officials see the newly annexed South as foreign and primitive.", "sig": "Internal colonialism. Southern brigandage resisted, and the 1863 Pica Law answered with martial law.", "author": "Luigi Carlo Farini", "alias": ["farini"], "source": "Luigi Carlo Farini to Cavour, Oct 27, 1860", "id": "nat39"}, {"stars": 1, "quote": "\"one of arms, of language, of altar, of memories, of blood and of heart\"", "meaning": "The romantic dream of a unified Italy.", "sig": "Formal unification in 1861 did not match that dream.", "author": "Alessandro Manzoni", "alias": ["manzoni"], "source": "Alessandro Manzoni, \"March 1821\" (quoted on the brigandage slide)", "id": "nat40"}, {"stars": 1, "quote": "\"All great world-historic facts and personages appear… twice… the first time as tragedy, the second time as farce\"", "meaning": "Napoleon III is a farcical repeat of Napoleon I.", "sig": "A critique of the Second Empire.", "author": "Marx", "alias": ["marx"], "source": "Marx, The Eighteenth Brumaire of Louis Bonaparte, 1852", "id": "nat41"}, {"stars": 1, "quote": "\"they will build no more barricades\"; boulevards \"as straight as an arrow\"; a centre \"well adapted to the accommodation of heavy artillery\"", "meaning": "Haussmann's boulevards were designed to crush revolts.", "sig": "Modernization as state control. Compare 1848's barricades.", "author": "Mark Twain", "alias": ["twain"], "source": "Mark Twain in Paris, July 1867", "id": "nat42"}, {"stars": 1, "quote": "\"Old Paris is gone (no human heart changes half so fast as a city's face)\"", "meaning": "Lament for a vanished city.", "sig": "The human cost of Haussmann's rebuilding.", "author": "Baudelaire", "alias": ["baudelaire"], "source": "Baudelaire", "id": "nat43"}, {"stars": 1, "quote": "\"You don't need to go to America to see savages… Here are the Redskins of Fenimore Cooper\" (a Parisian in Burgundy, 1840s; on the 10/19 slides)", "meaning": "City elites saw rural French peasants as foreign savages.", "sig": "Peasants had to be made French through roads, schools, conscription, and language. Compare Farini's \"Africa.\"", "author": "Eugen Weber", "alias": ["weber"], "source": "Eugen Weber, Peasants into Frenchmen, 1976", "id": "nat44"}]}, {"id": "imp", "name": "New Imperialism, 1870 to 1914", "dates": "10/19", "cards": [{"stars": 1, "quote": "\"In this new Reich of ours there is so much bitterness, so much unfruitful, sour, and poisoned political wrangling\"; a new road of national effort as \"a kind of liberating influence\"; \"the bearer of the culture-mission\"", "meaning": "Colonies will unite a quarrelling new Germany and prove it a civilizing great power.", "sig": "Empire as a cure for the strains of the new nation-state, just eight years after unification.", "author": "Friedrich Fabri", "alias": ["fabri"], "source": "Friedrich Fabri, \"Does Germany Need Colonies?\", 1879", "id": "imp45"}, {"stars": 1, "quote": "\"In order to save the 40,000,000 inhabitants of the United Kingdom from a bloody civil war… The Empire… is a bread and butter question. If you want to avoid civil war, you must become imperialists.\"", "meaning": "Colonies absorb surplus population and provide markets, which prevents class war at home.", "sig": "Social imperialism. It answers Disraeli's \"two nations\" and the Marxist threat.", "author": "Cecil Rhodes", "alias": ["rhodes"], "source": "Cecil Rhodes, 1895", "id": "imp46"}, {"stars": 1, "quote": "\"It was on the day that France became a colonial power again that she became once more conscious of her vitality and her strength\"", "meaning": "Empire restored France's pride after defeat in 1871.", "sig": "The same logic as Fabri: empire heals the nation.", "author": "French colonial administrator (1912)", "alias": ["administrator", "colonial official"], "source": "A French colonial administrator, 1912", "id": "imp47"}, {"stars": 1, "quote": "\"the end of a pleasant fiction and the beginning of a harsh reality\"; \"a rupture, not a transition\"", "meaning": "The rules-based order was partly a fiction and is now collapsing.", "sig": "Kliger's present-day echo of imperial might-makes-right.", "author": "Mark Carney", "alias": ["carney"], "source": "Mark Carney, Canadian PM, Davos, Jan 20, 2026", "id": "imp48"}, {"stars": 2, "quote": "Venezuela operation as an assault on the international legal order; a return to \"might makes right\"", "meaning": "The postwar order of peace through international law is unravelling.", "sig": "The course frame: is the world of nation-states fragile?", "author": "Oona Hathaway", "alias": ["hathaway"], "source": "Oona Hathaway, 2026 (9/23 slides, shown twice)", "id": "imp49"}]}, {"id": "war", "name": "The Great War", "dates": "10/21", "cards": [{"stars": 1, "quote": "\"'Jack fell as he'd have wished,' the mother said\"; \"He'd told the poor old dear some gallant lies\"; \"'Jack', cold-footed, useless swine, / Had panicked down the trench\"; \"Blown to small bits\"", "meaning": "An officer comforts a mother with lies about her son's heroic death. In truth he panicked and died for nothing.", "sig": "A soldier-poet exposes patriotic myth and the gulf between home front and trenches.", "author": "Siegfried Sassoon", "alias": ["sassoon"], "source": "Siegfried Sassoon, \"The Hero,\" 1917", "id": "war50"}, {"stars": 1, "quote": "\"April is the cruellest month\"; \"A heap of broken images\"; \"I will show you fear in a handful of dust\"", "meaning": "Postwar civilization is barren and fragmented.", "sig": "Modernism as postwar disillusion.", "author": "T.S. Eliot", "alias": ["eliot"], "source": "T.S. Eliot, The Waste Land, 1922", "id": "war51"}, {"stars": 1, "quote": "\"gadji beri bimba glandridi laula lonni cadori\"", "meaning": "Deliberate nonsense sound poetry.", "sig": "If reason produced the war, Dada rejects reason. Arp's chance collages and Höch's photomontage on the slides make the same point.", "author": "Hugo Ball", "alias": ["hugo ball", "ball", "dada"], "source": "Hugo Ball, \"Gadji Beri Bimba,\" 1916 (Dada)", "id": "war52"}, {"stars": 1, "quote": "\"Everyone seemed very gay and not the least upset\" after the assassination; \"There will be few serious consequences\"", "meaning": "No one expected Franz Ferdinand's murder to start a world war.", "sig": "Contingency: catastrophe out of complacency.", "author": "Berta de Bunsen", "alias": ["bunsen", "neue freie", "freie presse"], "source": "Berta de Bunsen, diary, and the Neue Freie Presse, June 28, 1914", "id": "war53"}, {"stars": 1, "quote": "\"peoples not yet able to stand by themselves under the strenuous conditions of the modern world\"; \"a sacred trust of civilisation\"; \"tutelage… entrusted to advanced nations\" as \"Mandatories\"", "meaning": "Former German and Ottoman colonies are handed to Britain and France as mandates.", "sig": "The civilizing mission in new clothes. Self-determination for Europe, tutelage for everyone else. Garvey attacks this.", "author": "League of Nations Covenant", "alias": ["league", "covenant", "article 22"], "source": "League of Nations Covenant, Article 22, 1919", "id": "war54"}]}, {"id": "peace", "name": "From War to Peace? WWI's End and the Russian Revolution", "dates": "10/26", "cards": [{"stars": 1, "quote": "\"If England wants peace, if France wants peace… pack up their bag and baggage and clear out of Africa\"; Africa will be to them \"what Europe has been for the last three hundred years\"; \"today no oppressed race or nation is afraid of speaking out in the cause of liberty\"", "meaning": "No real peace while Europe holds Africa. WWI awakened the colonized.", "sig": "A Jamaican Pan-Africanist (UNIA). Exposes the hypocrisy of the mandates and of Wilson's selective self-determination. Points toward decolonization.", "author": "Marcus Garvey", "alias": ["garvey"], "source": "Marcus Garvey, \"A Solution for World Peace,\" 1922", "id": "peace55"}, {"stars": 1, "quote": "\"the working class, exclusively by its own effort, is able to develop only trade union consciousness\"; socialist theory came from \"the educated representatives of the propertied classes, the intellectuals\"", "meaning": "Workers alone only seek better wages. A vanguard of intellectuals must lead the revolution.", "sig": "A break with Marx's self-emancipating workers, and the basis of Bolshevik one-party rule.", "author": "Lenin", "alias": ["lenin"], "source": "Lenin, What Is to Be Done?, 1902 (the slide says 1917)", "id": "peace56"}, {"stars": 1, "quote": "\"the pace of Soviet industrialization would determine whether the socialist fatherland survived or crumbled before its enemies\"", "meaning": "Rapid forced industrialization is a matter of survival.", "sig": "The Five-Year Plans (from 1928), Magnitogorsk, the \"2+2=5\" poster, and the 1932 to 1933 famine.", "author": "Stalin", "alias": ["stalin"], "source": "Stalin", "id": "peace57"}]}];
+const EXTRA = {peace:["Woodrow Wilson","Treaty of Versailles","Vera Brittain"],war:["Erich Maria Remarque","Vera Brittain","Woodrow Wilson"],imp:["Jules Ferry","Benjamin Disraeli","Marcus Garvey"],nat:["Eric Hobsbawm","Napoleon III"],ind:["Thomas Malthus","Karl Marx"],soc:["Robert Owen","Montesquieu"],rev:["Edmund Burke"]};
+const ALL = TOPICS.flatMap(t=>t.cards.map(c=>({...c,topic:t.id,topicName:t.name})));
+const byId = Object.fromEntries(ALL.map(c=>[c.id,c]));
+const store = {
+  get(k,d){try{const v=localStorage.getItem('hef:'+k);return v===null?d:JSON.parse(v)}catch(e){return d}},
+  set(k,v){try{localStorage.setItem('hef:'+k,JSON.stringify(v))}catch(e){}}
+};
+let state = {topic: store.get('topic','rev'), mode: store.get('mode','learn')};
+let missed = new Set(store.get('missed',[]));
+let best = store.get('best',{});
+let session = null;
+const $ = s=>document.querySelector(s);
+const esc = s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const shuffle = a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const stars = n=>n===2?'★★':'★';
+const topicName = id=> id==='all' ? 'All topics' : TOPICS.find(t=>t.id===id).name;
+
+function pool(){
+  let p = state.topic==='all' ? ALL : ALL.filter(c=>c.topic===state.topic);
+  if ($('#starOnly').checked) p = p.filter(c=>c.stars===2);
+  if ($('#missOnly').checked) p = p.filter(c=>missed.has(c.id));
+  return p;
+}
+function renderDrawers(){
+  const nav = $('#drawers');
+  const items = [...TOPICS.map(t=>({id:t.id,name:t.name,d:t.dates,n:t.cards.length})),{id:'all',name:'All topics',d:'Mixed review',n:ALL.length}];
+  nav.innerHTML = items.map(t=>{
+    const b = best[t.id];
+    return `<button type="button" class="drawer${t.id==='all'?' all':''}" data-topic="${t.id}" aria-current="${t.id===state.topic}">
+      <span class="t">${esc(t.name)}</span><span class="d">${esc(t.d)} · ${t.n} cards</span>
+      <span class="p">${b!=null?'Best '+b+'%':''}</span></button>`;
+  }).join('');
+  nav.querySelectorAll('.drawer').forEach(b=>b.onclick=()=>{state.topic=b.dataset.topic;store.set('topic',state.topic);renderDrawers();start()});
+}
+function renderModes(){
+  document.querySelectorAll('.modes button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===state.mode));
+  $('#len').closest('label').style.display = state.mode==='flash'?'none':'';
+  $('#missN').textContent = missed.size?`(${missed.size})`:'';
+  $('#kbd').innerHTML = state.mode==='flash' ? 'Keys: <kbd>Space</kbd> flip, <kbd>→</kbd> next, <kbd>←</kbd> back'
+    : state.mode==='learn' ? 'Keys: <kbd>1</kbd>–<kbd>4</kbd> answer, <kbd>Enter</kbd> next' : 'Keys: <kbd>Enter</kbd> check, then <kbd>Enter</kbd> next';
+}
+document.querySelectorAll('.modes button').forEach(b=>b.onclick=()=>{state.mode=b.dataset.mode;store.set('mode',state.mode);renderModes();start()});
+['#len','#starOnly','#missOnly'].forEach(s=>$(s).onchange=start);
+
+function cardBlock(c, withMeta=true){
+  return `${withMeta?`<div class="meta"><span>${esc(c.topicName)}</span><span class="stars" title="${c.stars===2?'On slides in 2+ lectures':'On the slides'}">${stars(c.stars)}</span></div>`:''}`;
+}
+function explain(c){
+  return `<div class="who">${esc(c.author)}</div><div class="src">${esc(c.source)}</div>
+  <dl class="explain"><div><dt>Meaning</dt><dd>${esc(c.meaning)}</dd></div><div><dt>Significance</dt><dd>${esc(c.sig)}</dd></div></dl>`;
+}
+function quoteHtml(c){return `<p class="quote${c.quote.length>260?' long':''}">${esc(c.quote)}</p>`}
+function setProg(i,n){$('#prog').style.width = n? (100*i/n)+'%' : '0'}
+
+function start(){
+  renderModes();
+  const p = pool();
+  if(!p.length){
+    $('#stage').innerHTML = `<div class="icard"><div class="meta"><span>${esc(topicName(state.topic))}</span></div><p class="empty">${$('#missOnly').checked?'No missed cards here yet. Untick “Missed cards only” to study the full set.':'No cards match these filters. Untick “★★ only” to see every slide quote.'}</p></div>`;
+    setProg(0,0); return;
+  }
+  const lenV = $('#len').value;
+  let cards = shuffle(p);
+  if(state.mode!=='flash' && lenV!=='all') cards = cards.slice(0, Math.min(+lenV, cards.length));
+  session = {cards, i:0, right:0, wrongIds:[], answered:false, flipped:false};
+  if(state.mode==='flash') showFlash(); else if(state.mode==='learn') showLearn(); else showWrite();
+}
+
+/* ---------- Flashcards ---------- */
+function showFlash(){
+  const s=session, c=s.cards[s.i]; s.flipped=false; setProg(s.i+1,s.cards.length);
+  $('#stage').innerHTML = `
+  <div class="flip" id="flip" tabindex="0" role="button" aria-label="Flip card">
+    <div class="inner">
+      <div class="face front icard">${cardBlock(c)}${quoteHtml(c)}<div class="hint">Who said it, and why does it matter? Tap to flip.</div></div>
+      <div class="face back icard">${cardBlock(c)}${explain(c)}</div>
+    </div>
+  </div>
+  <div class="bar">
+    <button class="btn" id="prev" type="button" ${s.i===0?'disabled':''}>Back</button>
+    <span class="count">${s.i+1} of ${s.cards.length}</span>
+    <span style="display:flex;gap:8px">
+      <button class="btn bad" id="still" type="button">Still learning</button>
+      <button class="btn good" id="know" type="button">Know it</button>
+    </span>
+  </div>`;
+  fitFlip();
+  const f=$('#flip'); f.onclick=()=>{f.classList.toggle('on');s.flipped=!s.flipped};
+  f.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();f.click()}};
+  $('#prev').onclick=()=>{if(s.i>0){s.i--;showFlash()}};
+  $('#still').onclick=()=>{missed.add(c.id);saveMissed();nextFlash()};
+  $('#know').onclick=()=>{missed.delete(c.id);saveMissed();nextFlash()};
+}
+function fitFlip(){
+  const f=$('#flip'); if(!f) return;
+  const faces=f.querySelectorAll('.face'); faces.forEach(x=>x.style.position='relative');
+  const h=Math.max(...[...faces].map(x=>x.scrollHeight)); faces.forEach(x=>x.style.position='');
+  f.style.minHeight=f.querySelector('.inner').style.minHeight=h+'px';
+}
+window.addEventListener('resize',()=>{if(state.mode==='flash')fitFlip()});
+function nextFlash(){
+  const s=session;
+  if(s.i<s.cards.length-1){s.i++;showFlash()}
+  else{ setProg(1,1);
+    const left=s.cards.filter(c=>missed.has(c.id)).length;
+    $('#stage').innerHTML=`<div class="icard done">${cardBlock({topicName:topicName(state.topic),stars:0},true).replace('<span class="stars" title="On the slides">★</span>','')}
+      <p class="big">${s.cards.length-left} / ${s.cards.length}</p><p>marked “Know it”. ${left?`${left} card${left>1?'s':''} still to learn, saved to your missed pile.`:'Every card in this set is marked as known.'}</p>
+      <div class="bar"><button class="btn" id="again" type="button">Shuffle again</button>${left?'<button class="btn primary" id="drill" type="button">Study the missed cards</button>':'<button class="btn primary" id="toLearn" type="button">Take the Learn quiz</button>'}</div></div>`;
+    $('#again').onclick=start;
+    if($('#drill')) $('#drill').onclick=()=>{$('#missOnly').checked=true;start()};
+    if($('#toLearn')) $('#toLearn').onclick=()=>{state.mode='learn';store.set('mode','learn');start()};
+  }
+}
+
+/* ---------- Learn (multiple choice) ---------- */
+function makeQuestion(c){
+  const sameTopic = ALL.filter(x=>x.topic===c.topic);
+  const useMeaning = Math.random()<0.3 && new Set(sameTopic.filter(x=>x.author!==c.author).map(x=>x.meaning)).size>=3;
+  if(useMeaning){
+    const others = shuffle(sameTopic.filter(x=>x.author!==c.author)).slice(0,3).map(x=>x.meaning);
+    return {kind:'meaning', prompt:`This is ${c.author}. What is the argument?`, answer:c.meaning, options:shuffle([c.meaning,...others])};
+  }
+  let names = [...new Set(sameTopic.map(x=>x.author).filter(a=>a!==c.author))];
+  names = shuffle(names);
+  const extras = shuffle((EXTRA[c.topic]||[]).filter(a=>a!==c.author && !names.includes(a)));
+  let opts = names.slice(0,3);
+  while(opts.length<3 && extras.length) opts.push(extras.shift());
+  if(opts.length<3){ const rest=shuffle([...new Set(ALL.map(x=>x.author))].filter(a=>a!==c.author&&!opts.includes(a))); while(opts.length<3) opts.push(rest.shift()); }
+  return {kind:'who', prompt:'Who wrote or said this?', answer:c.author, options:shuffle([c.author,...opts])};
+}
+function showLearn(){
+  const s=session, c=s.cards[s.i]; s.answered=false; setProg(s.i,s.cards.length);
+  const q = s.q = makeQuestion(c);
+  $('#stage').innerHTML = `<div class="icard">${cardBlock(c)}${quoteHtml(c)}
+    <p class="prompt">${esc(q.prompt)}</p>
+    <div class="choices">${q.options.map((o,k)=>`<button class="choice" type="button" data-v="${esc(o)}"><span class="k">${k+1}</span><span>${esc(o)}</span></button>`).join('')}</div>
+    <div id="fb"></div></div>
+    <div class="bar"><span class="count">Question ${s.i+1} of ${s.cards.length} · ${s.right} right</span><span></span></div>`;
+  document.querySelectorAll('.choice').forEach(b=>b.onclick=()=>answerLearn(b));
+}
+function answerLearn(btn){
+  const s=session,c=s.cards[s.i],q=s.q; if(s.answered) return; s.answered=true;
+  const ok = btn.dataset.v===q.answer;
+  document.querySelectorAll('.choice').forEach(b=>{b.disabled=true; if(b.dataset.v===q.answer) b.classList.add('right')});
+  if(!ok) btn.classList.add('wrong');
+  record(c,ok);
+  $('#fb').innerHTML = `<div class="feedback"><div class="verdict ${ok?'ok':'no'}">${ok?'Correct.':'Not quite.'}</div>${explain(c)}
+    <div class="bar"><span></span><button class="btn primary" id="next" type="button">${s.i<s.cards.length-1?'Next question':'See results'}</button></div></div>`;
+  $('#next').onclick=nextQ; $('#next').focus({preventScroll:true});
+}
+function record(c,ok){
+  const s=session;
+  if(ok){s.right++; if($('#missOnly').checked) missed.delete(c.id)}
+  else{s.wrongIds.push(c.id); missed.add(c.id)}
+  saveMissed();
+}
+function nextQ(){
+  const s=session;
+  if(s.i<s.cards.length-1){s.i++; state.mode==='learn'?showLearn():showWrite()}
+  else finish();
+}
+function finish(){
+  const s=session; setProg(1,1);
+  const pct = Math.round(100*s.right/s.cards.length);
+  if(!$('#starOnly').checked && !$('#missOnly').checked){ if(best[state.topic]==null || pct>best[state.topic]){best[state.topic]=pct; store.set('best',best); renderDrawers();} }
+  const wrong = s.wrongIds.map(id=>byId[id]);
+  $('#stage').innerHTML = `<div class="icard done"><div class="meta"><span>${esc(topicName(state.topic))}</span></div>
+    <p class="big">${s.right} / ${s.cards.length}</p>
+    <p>${pct===100?'A clean sweep. Try Write mode next, where you type the name from memory.':pct>=75?'Solid. Review the misses below, then run it again.':'Read the misses below, flip through them in Flashcards, then retake.'}</p>
+    ${wrong.length?`<ul class="missedlist">${wrong.map(c=>`<li><b>${esc(c.author)}</b>: ${esc(c.quote.length>140?c.quote.slice(0,140)+'…':c.quote)}</li>`).join('')}</ul>`:''}
+    <div class="bar"><button class="btn" id="again" type="button">Retake</button>${wrong.length?'<button class="btn primary" id="drill" type="button">Drill the ones I missed</button>':''}</div></div>`;
+  $('#again').onclick=start;
+  if($('#drill')) $('#drill').onclick=()=>{$('#missOnly').checked=true;start()};
+}
+function saveMissed(){store.set('missed',[...missed]); $('#missN').textContent = missed.size?`(${missed.size})`:''}
+
+/* ---------- Write ---------- */
+const norm = s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+function showWrite(){
+  const s=session,c=s.cards[s.i]; s.answered=false; setProg(s.i,s.cards.length);
+  $('#stage').innerHTML = `<div class="icard">${cardBlock(c)}${quoteHtml(c)}
+    <p class="prompt">Type the author or source</p>
+    <form class="write" id="wf" autocomplete="off"><input id="wi" aria-label="Your answer" placeholder="e.g. Robespierre"><button class="btn primary" type="submit">Check</button><button class="btn" type="button" id="idk">Show answer</button></form>
+    <div id="fb"></div></div>
+    <div class="bar"><span class="count">Question ${s.i+1} of ${s.cards.length} · ${s.right} right</span><span></span></div>`;
+  $('#wi').focus({preventScroll:true});
+  $('#wf').onsubmit=e=>{e.preventDefault(); if(s.answered){nextQ();return} checkWrite($('#wi').value)};
+  $('#idk').onclick=()=>{if(!s.answered) checkWrite('')};
+}
+function checkWrite(v){
+  const s=session,c=s.cards[s.i]; s.answered=true;
+  const a=norm(v); const ok = a.length>1 && c.alias.some(x=>a.includes(norm(x)));
+  record(c,ok);
+  $('#wi').disabled=true; $('#idk').disabled=true;
+  $('#fb').innerHTML = `<div class="feedback"><div class="verdict ${ok?'ok':'no'}">${ok?'Correct.':(a?'Not quite. ':'')+'Answer: '+esc(c.author)}</div>${explain(c)}
+    <div class="bar"><span></span><button class="btn primary" id="next" type="button">${s.i<s.cards.length-1?'Next question':'See results'}</button></div></div>`;
+  $('#next').onclick=nextQ; $('#next').focus({preventScroll:true});
+}
+
+/* ---------- keys & theme ---------- */
+document.addEventListener('keydown',e=>{
+  if(!session || e.target.tagName==='INPUT' || e.target.tagName==='SELECT') return;
+  if(state.mode==='flash'){
+    if(e.key===' '){e.preventDefault(); $('#flip')?.click()}
+    if(e.key==='ArrowRight') $('#know')?.click();
+    if(e.key==='ArrowLeft') $('#prev')?.click();
+  } else if(state.mode==='learn'){
+    if(/^[1-4]$/.test(e.key)){const b=document.querySelectorAll('.choice')[+e.key-1]; if(b&&!b.disabled) b.click()}
+    if(e.key==='Enter' && session.answered && document.activeElement?.id!=='next'){e.preventDefault(); $('#next')?.click()}
+  }
+});
+$('#themeBtn').onclick=()=>{
+  const cur=document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  const nx=cur==='dark'?'light':'dark'; document.documentElement.dataset.theme=nx; store.set('theme',nx);
+};
+(()=>{const t=store.get('theme',null); if(t) document.documentElement.dataset.theme=t})();
+if(!TOPICS.some(t=>t.id===state.topic) && state.topic!=='all') state.topic='rev';
+renderDrawers(); start();
+</script>
+</body>
+</html>
